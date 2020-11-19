@@ -1,0 +1,117 @@
+===Setup===
+
+The setup that we need to do is to install Cypress itself. We assume that you have npm
+installed on your box. If not, use your operating systems package manager 
+`apt-get install npm`. This is the node package manager, and it will allow us to get
+any package from the node repos, such as Cypress.
+
+With npm installed we're going to install the Cypress program. In a terminal, type in
+
+`npm install cypress`
+
+This will install cypress onto your system. It will be installed in your node_modules 
+directory. You are able to update this software by running
+
+`npm update cypress`
+
+===Lets Launch Cypress===
+
+The way we have the cypress binary installed, we can run the graphical user interface by
+running 
+
+`./node_modules/.bin/cypress open`
+
+In just a second, this will open up a window that will display all of the different tests
+that come as exaples. By clicking on any of these, you will start running that specific
+test. Cypress is nice because we can run in headless mode for use in a continuous
+integration (CI/CD) pipeline where we want to run tests without having to actually look
+at a display, but still see if tests are passing or failing. We will talk more about running
+Cypress in headless mode later. For now we'll focus on learning the file structure of how
+Cypress is laid out
+
+=== The File Structure ===
+
+At the root node of the repository, we have the cypress directory, the node_modules, and the
+cypress.json. Let's start with cypress.json. This is the configuration file, where we can
+set different options for how the program is going to run. This file will become important
+when you work on more advanced projects in different environments. Let's go over some of the
+more useful flags
+
+====Flags====
+baseUrl: This is the URL that will start with. This way you don't have to specify the URL for
+each test. For example, if you know you'll always start out with "www.google.com", then you
+can specify this as the baseUrl. When your tests start running, Cypress will start at 
+google.com. Keep in mind that when using the cy.visit() command, this will still be the base
+that is used. So following the example of google.com, if we had that option set and used
+
+cy.visit("/images");
+
+Cypress would go to www.google.com/images
+
+port: This is the port that Cypress will use. This is generally set by cypress randomly. If
+you are using the GUI test runner, this might not matter. However, if you are running an 
+application locally on your machine, you may need to set this. In a CI/CD environment, 
+you will generally want to consult with your DevOps person/people on what port you should
+be using.
+
+reporter: The reporter that you want to use. Cypress is built on Mocha. So any mocha test
+reporter can be used.
+
+timeouts: Timeouts for different events can be configured in the cypress.json file. 
+Consult the Cypress docs for more info 
+https://docs.cypress.io/guides/references/configuration.html#Timeouts
+
+integrationFolder:
+pluginsFile
+fixturesFolder
+ScreenshotsFolder:
+SupportFile
+videosFolder:
+
+All of the above options are just places where files are stored. We are not going to mess
+with the default options of where files are stored. This can be useful when working in
+different environments, or want to rename things.
+
+VideoCompression: A value between 0 and 51, 0 is best quality, 51 is best size. Default value
+is 32
+
+video: Weather or not Cypress will capture a video when running cypress run. Default value
+is true.
+
+We can override any of these options for a specific run by passing command line options using
+the --config flag
+
+For example:
+
+`cypress open --config baseUrl=https://www.google.com`
+
+will override your cypress.json file.
+
+
+==== Fixtures ====
+
+in the fixtures directory, there are static files. Here we will generally keep any files that
+we need (Like, pdf's or image files for testing image uploads). You can organize this 
+directory however you would like. Cypress references this directory whenever you specify a 
+file. You can think of this as the "Home" directory of cypress. I personally like to keep
+JSON configuration files here.
+
+==== Support ====
+
+The support directory is where you should be keeping helper functions, and global functions 
+that you use often. In the support directory, you will want to use the index.js file to
+add new files to your project.
+
+==== Integration ====
+
+These are where your actual tests are going to go. Files that you add here will show up in
+the cypress GUI. This is pretty self explainatory.
+
+=== Writing Our First Cypress Test ===
+
+Let's create a new test. Lets open up a text editor (I'll be using the IntelliJ IDE) and 
+create a new file in your integration directory. Lets call it "myFirstTest.spec.js"
+
+Now lets open up the Cypress GUI, and see that the new test has been added to GUI.
+
+
